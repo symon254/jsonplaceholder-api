@@ -1,24 +1,38 @@
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+//import "bootstrap/dist/css/bootstrap.min.css";
+import AddTodo from "./components/AddTodo";
+import TodosList from "./components/TodosList";
+import Todo from './components/Todo';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <Router>
+    <nav className="navbar navbar-expand navbar-dark bg-dark">
+      <a href="/todos" className="navbar-brand">
+        bezKoder
+      </a>
+      <div className="navbar-nav mr-auto">
+        <li className="nav-item">
+          <Link to={"/todos"} className="nav-link">
+            Todos
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link to={"/add"} className="nav-link">
+            Add
+          </Link>
+        </li>
+      </div>
+    </nav>
+    <div className="container mt-3">
+      <Routes>
+        <Route exact path={["/", "/todos"]} component={TodosList} />
+        <Route exact path="/add" component={AddTodo} />
+        <Route path="/todos/:id" component={Todo} />
+      </Routes>
     </div>
+  </Router>
   );
 }
 
