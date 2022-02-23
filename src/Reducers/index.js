@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import todos from "./todos";
+import tutorials from "./tutorials";
 export default combineReducers({
-  todos,
+    tutorials,
 });
