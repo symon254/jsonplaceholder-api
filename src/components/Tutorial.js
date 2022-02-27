@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
 import { updateTutorial, deleteTutorial } from "../Actions/tutorials";
 import TutorialDataService from "../services/TutorialService";
 const Tutorial = (props) => {
@@ -23,9 +24,12 @@ const Tutorial = (props) => {
                 console.log(e);
             });
     };
+
+    const params = useParams;
+
     useEffect(() => {
-        getTutorial(props.match.params.id);
-    }, [props.match.params.id]);
+        getTutorial(params.id);
+    }, [params.id]);
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setCurrentTutorial({ ...currentTutorial, [name]: value });

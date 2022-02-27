@@ -4,11 +4,12 @@ import {
     retrieveTutorials,
     findTutorialsByTitle,
     deleteAllTutorials,
+    deleteTutorial,
 } from "../Actions/tutorials";
 
 import { Link } from "react-router-dom";
 
-const TutorialsList = () => {
+const TutorialsList = (props) => {
     const [currentTutorial, setCurrentTutorial] = useState(null);
     const [currentIndex, setCurrentIndex] = useState(-1);
     const [searchTitle, setSearchTitle] = useState("");
@@ -17,12 +18,6 @@ const TutorialsList = () => {
     useEffect(() => {
         dispatch(retrieveTutorials());
     }, [dispatch]);
-    // const initFetch = useCallback(() => {
-    //   dispatch(retrieveTutorials());
-    // }, [dispatch])
-    // useEffect(() => {
-    //   initFetch()
-    // }, [initFetch])
 
     const onChangeSearchTitle = (e) => {
         const searchTitle = e.target.value;
@@ -39,8 +34,8 @@ const TutorialsList = () => {
     const removeAllTutorials = () => {
         dispatch(deleteAllTutorials())
             .then((response) => {
-                console.log(response);
                 refreshData();
+                console.log(response);
             })
             .catch((e) => {
                 console.log(e);
@@ -49,6 +44,16 @@ const TutorialsList = () => {
     const findByTitle = () => {
         refreshData();
         dispatch(findTutorialsByTitle(searchTitle));
+    };
+
+    const removeTutorial = () => {
+        dispatch(deleteTutorial(currentTutorial.id))
+            .then(() => {
+                props.history.push("/tutorials");
+            })
+            .catch((e) => {
+                console.log(e);
+            });
     };
     return (
         <div className="list row">
@@ -88,6 +93,16 @@ const TutorialsList = () => {
                                 key={index}
                             >
                                 {tutorial.title}
+                                <h2
+                                    style={{
+                                        color: "red",
+                                        float: "right",
+                                        cursor: "pointer",
+                                    }}
+                                    onClick={removeTutorial}
+                                >
+                                    x
+                                </h2>
                             </li>
                         ))}
                 </ul>
@@ -122,12 +137,21 @@ const TutorialsList = () => {
                                 ? "Published"
                                 : "Pending"}
                         </div>
-                        <Link
+                        <p>
+                            <Link
+                                to={`/tutorials/${currentTutorial.id}`}
+                                className="badge badge-warning"
+                            >
+                                Edit
+                            </Link>
+                        </p>
+
+                        {/* <Link
                             to={"/tutorials/" + currentTutorial.id}
                             className="badge badge-warning"
                         >
                             Edit
-                        </Link>
+                        </Link> */}
                     </div>
                 ) : (
                     <div>

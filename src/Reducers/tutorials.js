@@ -5,20 +5,7 @@ import {
     DELETE_TUTORIAL,
     DELETE_ALL_TUTORIALS,
 } from "../Actions/types";
-const initialState = [
-    {
-        id: 1,
-        title: "list1",
-    },
-    {
-        id: 2,
-        title: "list2",
-    },
-    {
-        id: 3,
-        title: "list3",
-    },
-];
+const initialState = [];
 function tutorialReducer(tutorials = initialState, action) {
     const { type, payload } = action;
     switch (type) {
