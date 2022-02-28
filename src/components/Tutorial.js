@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { updateTutorial, deleteTutorial } from "../Actions/tutorials";
-import TutorialDataService from "../services/TutorialService";
+//import TutorialDataService from "../services/TutorialService";
+import http from "../Utils/api";
+
 const Tutorial = (props) => {
     const initialTutorialState = {
         id: null,
@@ -14,26 +16,48 @@ const Tutorial = (props) => {
         useState(initialTutorialState);
     const [message, setMessage] = useState("");
     const dispatch = useDispatch();
-    const getTutorial = (id) => {
-        TutorialDataService.get(id)
-            .then((response) => {
-                setCurrentTutorial(response.data);
-                console.log(response.data);
-            })
-            .catch((e) => {
-                console.log(e);
+
+    // const getTutorial = (id) => {
+    //     http.get(`/tutorials/${id}`)
+    //         .then((response) => {
+    //             setCurrentTutorial(response.data);
+    //             console.log(response.data);
+    //         })
+    //         .catch((e) => {
+    //             console.log(e);
+    //         });
+    // };
+
+    const getTutorial = () => async (id) => {
+        try {
+            const res = await http.get(`/tutorials/${id}`).then(() => {
+                setCurrentTutorial(res.data);
+                console.log(res.data);
             });
+        } catch (err) {
+            console.log(err);
+        }
     };
+
+    // const getTutorial = async (id) => {
+    //     const res = await fetch(`http://localhost:8000/tutorials/${id}`);
+    //     const data = await res.json();
+
+    //     return data;
+
+    // };
 
     const params = useParams;
 
     useEffect(() => {
         getTutorial(params.id);
     }, [params.id]);
+
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setCurrentTutorial({ ...currentTutorial, [name]: value });
     };
+
     const updateStatus = (status) => {
         const data = {
             id: currentTutorial.id,
@@ -43,9 +67,9 @@ const Tutorial = (props) => {
         };
         dispatch(updateTutorial(currentTutorial.id, data))
             .then((response) => {
-                console.log(response);
                 setCurrentTutorial({ ...currentTutorial, published: status });
-                setMessage("The status was updated successfully!");
+                console.log(response);
+                // setMessage("The status was updated successfully!");
             })
             .catch((e) => {
                 console.log(e);
