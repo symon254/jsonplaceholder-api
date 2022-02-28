@@ -11,6 +11,7 @@ const AddTutorial = () => {
     const [tutorial, setTutorial] = useState(initialTutorialState);
     const [submitted, setSubmitted] = useState(false);
     const dispatch = useDispatch();
+
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setTutorial({ ...tutorial, [name]: value });

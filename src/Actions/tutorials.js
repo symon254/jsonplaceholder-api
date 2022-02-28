@@ -49,7 +49,7 @@ export const retrieveTutorials = () => async (dispatch) => {
         console.log(err);
     }
 };
-// export const retrieveTutorials = (id) => async (dispatch) => {
+// export const retrieveTutorial = (id) => async (dispatch) => {
 //     try {
 //         const res = await http.get(`/tutorials/${id}`);
 //         dispatch({
