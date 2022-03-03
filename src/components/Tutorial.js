@@ -6,6 +6,8 @@ import { updateTutorial, deleteTutorial } from "../Actions/tutorials";
 import http from "../Utils/api";
 
 const Tutorial = (props) => {
+    const { id } = useParams();
+
     const initialTutorialState = {
         id: null,
         title: "",
@@ -28,15 +30,26 @@ const Tutorial = (props) => {
     //         });
     // };
 
-    const getTutorial = () => async (id) => {
-        try {
-            const res = await http.get(`/tutorials/${id}`).then(() => {
+    // const getTutorial = (id) => async () => {
+    //     try {
+    //         const res = await http.get(`/tutorials/${id}`).then(() => {
+    //             setCurrentTutorial(res.data);
+    //             console.log(res.data);
+    //         });
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
+    // };
+
+    const getTutorial = (id) => async () => {
+        http.get(`/tutorials/${id}`)
+            .then((res) => {
                 setCurrentTutorial(res.data);
                 console.log(res.data);
+            })
+            .catch((e) => {
+                console.log(e);
             });
-        } catch (err) {
-            console.log(err);
-        }
     };
 
     // const getTutorial = async (id) => {
@@ -46,12 +59,10 @@ const Tutorial = (props) => {
     //     return data;
 
     // };
-
-    const params = useParams;
-
     useEffect(() => {
-        getTutorial(params.id);
-    }, [params.id]);
+        dispatch(getTutorial(id));
+        console.log(id);
+    }, [dispatch, id]);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;

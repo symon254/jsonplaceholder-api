@@ -31,20 +31,6 @@ const TutorialsList = (props) => {
         setCurrentTutorial(tutorial);
         setCurrentIndex(index);
     };
-    const removeAllTutorials = () => {
-        dispatch(deleteAllTutorials())
-            .then((response) => {
-                refreshData();
-                console.log(response);
-            })
-            .catch((e) => {
-                console.log(e);
-            });
-    };
-    const findByTitle = () => {
-        refreshData();
-        dispatch(findTutorialsByTitle(searchTitle));
-    };
 
     const removeTutorial = () => {
         dispatch(deleteTutorial(currentTutorial.id))
@@ -55,6 +41,21 @@ const TutorialsList = (props) => {
                 console.log(e);
             });
     };
+    const removeAllTutorials = () => {
+        if (window.confirm("Are you sure?")) {
+            let dataItems = tutorials.map((data) => data.id);
+            for (let i = 0; i < dataItems.length; i++) {
+                const element = dataItems[i];
+                dispatch(deleteTutorial(element));
+                console.log(element);
+            }
+        }
+    };
+    const findByTitle = () => {
+        refreshData();
+        dispatch(findTutorialsByTitle(searchTitle));
+    };
+
     return (
         <div className="list row">
             <div className="col-md-8">
