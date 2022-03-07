@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { updateTutorial, deleteTutorial } from "../Actions/tutorials";
-//import TutorialDataService from "../services/TutorialService";
-import http from "../Utils/api";
+import {
+    updateTutorial,
+    deleteTutorial,
+    retrieveTutorial,
+} from "../Actions/tutorials";
+//import http from "../Utils/api";
 
 const Tutorial = (props) => {
     const { id } = useParams();
@@ -17,52 +20,34 @@ const Tutorial = (props) => {
     const [currentTutorial, setCurrentTutorial] =
         useState(initialTutorialState);
     const [message, setMessage] = useState("");
+    const tutorials = useSelector((state) => state.tutorials);
+
     const dispatch = useDispatch();
 
-    // const getTutorial = (id) => {
+    // const getTutorial = (id) => async () => {
     //     http.get(`/tutorials/${id}`)
-    //         .then((response) => {
-    //             setCurrentTutorial(response.data);
-    //             console.log(response.data);
+    //         .then((res) => {
+    //             setCurrentTutorial(res.data);
+    //             console.log(res.data);
     //         })
     //         .catch((e) => {
     //             console.log(e);
     //         });
     // };
+    // useEffect(() => {
+    //     dispatch(getTutorial(id));
+    //     console.log(id);
+    // }, [dispatch, id]);
 
-    // const getTutorial = (id) => async () => {
-    //     try {
-    //         const res = await http.get(`/tutorials/${id}`).then(() => {
-    //             setCurrentTutorial(res.data);
-    //             console.log(res.data);
-    //         });
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // };
-
-    const getTutorial = (id) => async () => {
-        http.get(`/tutorials/${id}`)
-            .then((res) => {
-                setCurrentTutorial(res.data);
-                console.log(res.data);
-            })
-            .catch((e) => {
-                console.log(e);
-            });
-    };
-
-    // const getTutorial = async (id) => {
-    //     const res = await fetch(`http://localhost:8000/tutorials/${id}`);
-    //     const data = await res.json();
-
-    //     return data;
-
-    // };
     useEffect(() => {
-        dispatch(getTutorial(id));
+        dispatch(retrieveTutorial(id));
         console.log(id);
     }, [dispatch, id]);
+    useEffect(() => {
+        if (tutorials) {
+            setCurrentTutorial({ ...tutorials });
+        }
+    }, [tutorials]);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -118,7 +103,7 @@ const Tutorial = (props) => {
                                 className="form-control"
                                 id="title"
                                 name="title"
-                                value={currentTutorial.title}
+                                value={currentTutorial.title || ""}
                                 onChange={handleInputChange}
                             />
                         </div>
@@ -129,7 +114,7 @@ const Tutorial = (props) => {
                                 className="form-control"
                                 id="description"
                                 name="description"
-                                value={currentTutorial.description}
+                                value={currentTutorial.description || ""}
                                 onChange={handleInputChange}
                             />
                         </div>

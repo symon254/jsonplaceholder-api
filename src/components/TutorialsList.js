@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
     retrieveTutorials,
     findTutorialsByTitle,
-    deleteAllTutorials,
     deleteTutorial,
+    deleteAllTutorial,
 } from "../Actions/tutorials";
 
 import { Link } from "react-router-dom";
@@ -46,7 +46,7 @@ const TutorialsList = (props) => {
             let dataItems = tutorials.map((data) => data.id);
             for (let i = 0; i < dataItems.length; i++) {
                 const element = dataItems[i];
-                dispatch(deleteTutorial(element));
+                dispatch(deleteAllTutorial(element));
                 console.log(element);
             }
         }
